@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             String name = (String) map.get("name");
             String uid = (String) map.get("uid");
             String imageString = (String) map.get("image");
+            String favorite = (String)map.get("favorite");
             byte[] bytes;
             if (imageString != null) {
                 bytes = Base64.decode(imageString, Base64.DEFAULT);
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            Question question = new Question(title, body, name, uid, dataSnapshot.getKey(), mGenre, bytes, answerArrayList);
+            Question question = new Question(title, body, name, uid, dataSnapshot.getKey(), mGenre, bytes, answerArrayList,favorite);
             mQuestionArrayList.add(question);
             mAdapter.notifyDataSetChanged();
         }
@@ -182,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_compter) {
                     mToolbar.setTitle("コンピューター");
                     mGenre = 4;
+                } else if (id == R.id.nav_favorite) {
+                    mToolbar.setTitle("お気に入り");
+                    mGenre = 5;
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -196,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mGenreRef != null) {
                     mGenreRef.removeEventListener(mEventListener);
                 }
+
                 mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(mGenre));
                 mGenreRef.addChildEventListener(mEventListener);
                 return true;
